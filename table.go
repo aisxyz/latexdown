@@ -1,26 +1,50 @@
 package latexdown
 
-var KeywordNodeTable = map[string]Noder{
-	`\(`: nil, // inline math mode
-	`\[`: nil, // display math mode
+import "fmt"
 
-	`_`: NewSubscriptNode(),
-	`^`: NewSuperscriptNode(),
+var KeywordNodeTable = map[string]NodeFactory{
+	`_`: MakeScriptFactory(KindSubscript),
+	`^`: MakeScriptFactory(KindSuperscript),
 
-	`(`: nil,
-	//`{`:       nil,
-	`[`:       nil,
-	`|`:       nil,
-	`\{`:      nil, // -> {x+y}
-	`\|`:      nil, // -> ||x+y||
-	`\langle`: nil, // \rangle
-	`\lceil`:  nil, // \rceil
-	`\lfloor`: nil, // \rfloor
+	`$`:       MakeGroupFactory(KindDollarInlineMode), // inline math mode
+	`\(`:      MakeGroupFactory(KindRoundInlineMode),  // inline math mode
+	`\[`:      MakeGroupFactory(KindDisplayMode),      // display math mode
+	`(`:       MakeGroupFactory(KindRoundBracket),
+	`[`:       MakeGroupFactory(KindSquareBracket),
+	`{`:       MakeGroupFactory(KindCurlyGroup),
+	`\{`:      MakeGroupFactory(KindCurlyBracket),
+	`|`:       MakeGroupFactory(KindVerticalBar),
+	`\|`:      MakeGroupFactory(KindDoublePipe),
+	`\langle`: MakeGroupFactory(KindAngleBracket),
+	`\lceil`:  MakeGroupFactory(KindCeil),
+	`\lfloor`: MakeGroupFactory(KindFloor),
 
-	`\left`: nil, // \right
-	`\big`:  nil,
-	`\Big`:  nil,
-	`\bigg`: nil,
-	`\Bigg`: nil,
-	`\quad`: nil, // similar to \t
+	`\left`:  MakeLeftRightFactory(KindLeft),
+	`\right`: MakeLeftRightFactory(KindRight),
+
+	`\big`:   MakeQualifierFactory(KindQualifierbig),
+	`\Big`:   MakeQualifierFactory(KindQualifierBig),
+	`\bigg`:  MakeQualifierFactory(KindQualifierbigg),
+	`\Bigg`:  MakeQualifierFactory(KindQualifierBigg),
+	`&`:      MakeQualifierFactory(KindQualifierAlign),
+	`\quad`:  MakeQualifierFactory(KindQualifierQuad),
+	`\\`:     MakeQualifierFactory(KindQualifierNewline),
+	`\ldots`: MakeQualifierFactory(KindQualifierLdots),
+
+	`\verb`: MakeEscapeFactory(KindEscapeVerb),
+
+	`\text`:   MakeTextFactory(KindText),
+	`\texttt`: MakeTextFactory(KindTexttt),
+
+	`\$`: MakeRawFactory(KindRawDollar),
+}
+
+func RegistKeywordNode(keyword string, factory NodeFactory) {
+	if factory == nil {
+		panic("the node factory is nil")
+	}
+	if _, exist := KeywordNodeTable[keyword]; exist {
+		fmt.Printf("Warning: overwrite keyword %q\n", keyword)
+	}
+	KeywordNodeTable[keyword] = factory
 }
