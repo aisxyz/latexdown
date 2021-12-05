@@ -1,12 +1,13 @@
 package latexdown
 
-type CommandKind int
+type NodeKind int
 
 const (
-	KindSubscript = iota
+	KindSubscript NodeKind = iota
 	KindSuperscript
 
 	KindRoundBracket
+	KindCurlyGroup
 	KindSquareBracket
 	KindCurlyBracket
 	KindAngleBracket
@@ -20,4 +21,8 @@ const (
 	KindQualifierBig
 	KindQualifierbigg
 	KindQualifierBigg
+
+	KindLeaf
+	KindLeafText
+	KindLeafNumber
 )

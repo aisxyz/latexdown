@@ -2,10 +2,10 @@ package latexdown
 
 import "strings"
 
-func FlattenCommands(cmds []Commander) string {
+func FlattenNodes(nodes []Noder) string {
 	var buf strings.Builder
-	for _, cmd := range cmds {
-		buf.WriteString(cmd.String())
+	for _, node := range nodes {
+		buf.WriteString(node.String())
 	}
 	return buf.String()
 }
