@@ -22,3 +22,9 @@ func (node NodeBase) GetKind() NodeKind {
 }
 
 func (node NodeBase) Feed(rd *strings.Reader) {} // do nothing
+
+func (node NodeBase) String() string {
+	return ""
+}
+
+var EmptyNode = NodeBase{Kind: KindEmpty}

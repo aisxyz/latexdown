@@ -33,6 +33,8 @@ var KeywordNodeTable = map[string]NodeFactory{
 
 	`\verb`: MakeEscapeFactory(KindEscapeVerb),
 
+	`\begin`: MakeBeginEndFactory(KindBegin),
+
 	`\text`:   MakeTextFactory(KindText),
 	`\texttt`: MakeTextFactory(KindTexttt),
 

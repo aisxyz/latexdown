@@ -5,7 +5,9 @@ import "fmt"
 type NodeKind int
 
 const (
-	KindSubscript NodeKind = iota
+	KindEmpty NodeKind = iota
+
+	KindSubscript
 	KindSuperscript
 
 	KindRoundInlineMode
@@ -35,6 +37,8 @@ const (
 
 	KindEscapeVerb
 
+	KindBegin
+
 	KindText
 	KindTexttt
 
@@ -48,6 +52,8 @@ const (
 
 func (kind NodeKind) String() string {
 	switch kind {
+	case KindEmpty:
+		return "KindEmpty"
 	case KindSubscript:
 		return "KindSubscript"
 	case KindSuperscript:
@@ -98,6 +104,8 @@ func (kind NodeKind) String() string {
 		return "KindQualifierLdots"
 	case KindEscapeVerb:
 		return "KindEscapeVerb"
+	case KindBegin:
+		return "KindBegin"
 	case KindText:
 		return "KindText"
 	case KindTexttt:

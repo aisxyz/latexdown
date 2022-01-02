@@ -18,7 +18,7 @@ func MakeLeftRightFactory(kind NodeKind) NodeFactory {
 		panic(fmt.Errorf("MakeLeftRightFactory: unsupported kind: %s", kind))
 	}
 	return func() Noder {
-		node := LeftRightGroup{}
+		node := LeftRightGroup{Value: EmptyNode}
 		node.Kind = kind
 		return &node
 	}
@@ -26,14 +26,11 @@ func MakeLeftRightFactory(kind NodeKind) NodeFactory {
 
 type LeftRightGroup struct {
 	NodeBase
-	Value Noder // will be nil for "\left." or "\right*"
+	Value Noder
 }
 
 func (node LeftRightGroup) String() string {
-	if node.Value != nil {
-		return node.Value.String()
-	}
-	return ""
+	return node.Value.String()
 }
 
 func (node *LeftRightGroup) Feed(rd *strings.Reader) {
@@ -47,6 +44,11 @@ func (node *LeftRightGroup) Feed(rd *strings.Reader) {
 		if node.Kind == KindRight {
 			return
 		}
-		node.Value = ParseOneNode(rd, false, nil)
+		ConsumePrefixSpaces(rd)
+		node.Value = ParseOneNode(rd, false, func(n Noder) {
+			if kind := n.GetKind(); !IsGroupKind(kind) {
+				panic(fmt.Errorf("unexpected kind: %s", kind))
+			}
+		})
 	}
 }

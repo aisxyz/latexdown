@@ -33,6 +33,7 @@ func MakeGroupFactory(kind NodeKind) NodeFactory {
 type Group struct {
 	NodeBase
 	Values []Noder
+	Closed bool
 
 	escape bool
 }
@@ -79,6 +80,7 @@ func (node *Group) Feed(rd *strings.Reader) {
 			continue
 		}
 		if string(scratch[:n]) == terminate {
+			node.Closed = true
 			break
 		}
 		rd.Seek(-int64(n), io.SeekCurrent)

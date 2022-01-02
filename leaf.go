@@ -2,7 +2,6 @@ package latexdown
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 	"unicode"
 )
@@ -54,11 +53,11 @@ func (node TextLeaf) String() string {
 
 type NumberLeaf struct {
 	NodeBase
-	Value float64
+	Value string
 }
 
 func (node NumberLeaf) String() string {
-	return fmt.Sprintf("%g", node.Value)
+	return fmt.Sprintf("%s", node.Value)
 }
 
 func (node *NumberLeaf) Feed(rd *strings.Reader) {
@@ -76,6 +75,6 @@ func (node *NumberLeaf) Feed(rd *strings.Reader) {
 			break
 		}
 	}
-	val, _ := strconv.ParseFloat(string(draft), 64)
-	node.Value = val
+	//val, _ := strconv.ParseFloat(string(draft), 64)
+	node.Value = string(draft)
 }
